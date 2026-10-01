@@ -1,0 +1,23 @@
+# SDD y Especificaciones
+specs/
+AGENTS.md
+
+# Python y entornos virtuales
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.cache/
+
+# Modelos, audios y datasets generados
+model/
+voice/
+voices/
+xtts_models/
+trained_models/
+datasets/
+outputs/
+test_temp_audio/
+reference_audios/
+*.wav
+*.mp3

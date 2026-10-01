@@ -1,0 +1,23 @@
+# Dependencias principales del Voice Cloning Studio (XTTS-v2 & VITS)
+# Para aceleración GPU, instalar PyTorch con el índice CUDA apropiado antes o durante:
+# pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124 (o cu128 / nightly)
+
+# Motores TTS e IA
+coqui-tts>=0.27.5
+transformers>=4.49.0
+faster-whisper>=1.0.3
+
+# Procesamiento Acústico y Audio
+soundfile>=0.14.0
+librosa>=1.0.0
+scipy>=1.18.0
+pydub>=0.25.1
+av>=18.1.0
+
+# Interfaz Web UI
+gradio>=6.0.0
+
+# Utilidades Numéricas y del Sistema
+numpy>=2.0.0
+tqdm>=4.66.0
+pydantic>=2.0.0
