@@ -37,7 +37,18 @@ class TestXTTSv2Spanish(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.base_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.ref_audio = os.path.join(cls.base_dir, "reference_audios", "Jair.wav")
+        ref_dir = os.path.join(cls.base_dir, "reference_audios")
+        os.makedirs(ref_dir, exist_ok=True)
+        import glob
+        existing = glob.glob(os.path.join(ref_dir, "*.wav"))
+        if existing:
+            cls.ref_audio = existing[0]
+        else:
+            cls.ref_audio = os.path.join(ref_dir, "locutor_prueba.wav")
+            sr = 24000
+            t = np.linspace(0, 3.5, int(sr * 3.5), endpoint=False)
+            dummy_wave = 0.25 * np.sin(2 * np.pi * 220 * t) + 0.1 * np.sin(2 * np.pi * 440 * t)
+            sf.write(cls.ref_audio, dummy_wave, sr)
         cls.engine = XTTSEngine.get_instance()
 
     def test_01_cuda_and_model_loading(self):
@@ -51,7 +62,7 @@ class TestXTTSv2Spanish(unittest.TestCase):
         """Verifica la extracción de perfiles latentes (.pt < 150 KB)."""
         self.assertTrue(os.path.isfile(self.ref_audio), f"Debe existir audio de referencia: {self.ref_audio}")
         
-        pt_path, dur = self.engine.extract_voice_profile(self.ref_audio, "test_jair")
+        pt_path, dur = self.engine.extract_voice_profile(self.ref_audio, "test_juan")
         self.assertTrue(os.path.isfile(pt_path))
         
         size_kb = os.path.getsize(pt_path) / 1024
@@ -68,7 +79,7 @@ class TestXTTSv2Spanish(unittest.TestCase):
         out_wav = os.path.join(self.base_dir, "outputs", "test_synth_out.wav")
         res = self.engine.synthesize(
             text="Esta es una prueba automatizada para validar la calidad y velocidad de XTTS en español.",
-            voice_identifier="test_jair",
+            voice_identifier="test_juan",
             output_path=out_wav,
             language="es"
         )
@@ -84,7 +95,7 @@ class TestXTTSv2Spanish(unittest.TestCase):
         chunks = []
         for chunk in self.engine.synthesize_stream(
             text="Prueba de streaming por fragmentos en tiempo real.",
-            voice_identifier="test_jair",
+            voice_identifier="test_juan",
             language="es",
             stream_chunk_size=20
         ):
@@ -96,11 +107,11 @@ class TestXTTSv2Spanish(unittest.TestCase):
 
     def test_05_ui_flow(self):
         """Verifica el flujo completo de funciones de la UI Gradio."""
-        msg, dropdown = register_and_extract_voice(self.ref_audio, "jair_ui_test")
+        msg, dropdown = register_and_extract_voice(self.ref_audio, "juan_ui_test")
         self.assertIn("guardado exitosamente", msg)
         
         out_path, status, t_infer, dur, rtf, size_str = synthesize_voice_ui(
-            voice_name="jair_ui_test",
+            voice_name="juan_ui_test",
             text="Prueba desde la interfaz de usuario.",
             speed=1.0
         )

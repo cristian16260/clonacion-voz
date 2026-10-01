@@ -182,13 +182,13 @@ Puedes sintetizar audios directamente sin levantar la interfaz web mediante `clo
 
 ```bash
 # Sintetizar usando un perfil de voz registrado (.pt)
-python clone_xtts_es.py --voice jair --texto "Hola, esta es una prueba de voz clonada con XTTS-v2." --out salida.wav
+python clone_xtts_es.py --voice juan --texto "Hola, esta es una prueba de voz clonada con XTTS-v2." --out salida.wav
 
 # Sintetizar pasando un audio de referencia directo
-python clone_xtts_es.py --voice "reference_audios/muestra.wav" --texto "Bienvenido al sistema automatizado de voz." --out bienvenida.wav
+python clone_xtts_es.py --voice "reference_audios/muestra_maria.wav" --texto "Bienvenido al sistema automatizado de voz." --out bienvenida.wav
 
 # Sintetizar leyendo el texto desde un archivo .txt
-python clone_xtts_es.py --voice jair --texto script.txt --out resultado.wav --speed 1.05 --temperature 0.65
+python clone_xtts_es.py --voice jose --texto script.txt --out resultado.wav --speed 1.05 --temperature 0.65
 ```
 
 **Parámetros CLI:**

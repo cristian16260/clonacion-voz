@@ -82,10 +82,14 @@ class TestVITSModule(unittest.TestCase):
         from vits_finetuner import VITSFineTuner
         from vits_engine import VITSEngine
         
-        ref_audio = os.path.join(BASE_DIR, "reference_audios", "Jair.wav")
+        ref_audio = os.path.join(BASE_DIR, "reference_audios", "locutor_prueba.wav")
         if not os.path.isfile(ref_audio):
-            # Crear un audio dummy si no existe Jair.wav
-            ref_audio = os.path.join(BASE_DIR, "outputs", "vits", "test_vits_synth.wav")
+            import glob
+            existing = glob.glob(os.path.join(BASE_DIR, "reference_audios", "*.wav"))
+            if existing:
+                ref_audio = existing[0]
+            else:
+                ref_audio = os.path.join(BASE_DIR, "outputs", "vits", "test_vits_synth.wav")
             
         test_voice = "test_vits_voice"
         

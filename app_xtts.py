@@ -174,7 +174,7 @@ def register_and_extract_voice(audio_single, audio_files, voice_name: str, tempe
         return "❌ Error: Debe subir al menos un archivo de audio (.mp3 o .wav) o grabar con el micrófono.", gr.update(), gr.update()
     
     if not voice_name or not voice_name.strip():
-        return "❌ Error: Ingrese un nombre para identificar la voz (ej: Jair).", gr.update(), gr.update()
+        return "❌ Error: Ingrese un nombre para identificar la voz (ej: Juan, Maria).", gr.update(), gr.update()
     
     try:
         engine = XTTSEngine.get_instance()
@@ -519,7 +519,7 @@ with gr.Blocks(title="XTTS-v2 Studio — Clonación de Voz en Español") as demo
                     )
                     voice_name_input = gr.Textbox(
                         label="Nombre de la Voz (Identificador)",
-                        placeholder="Ej: Jair, presentador_noticias, locutor_comercial"
+                        placeholder="Ej: Juan, Maria, presentador_noticias, locutor_comercial"
                     )
                     
                     gr.Markdown("#### ⚙️ Calibración de Timbre & Acondicionamiento Acústico")
@@ -639,7 +639,7 @@ with gr.Blocks(title="XTTS-v2 Studio — Clonación de Voz en Español") as demo
                     )
                     train_voice_name = gr.Textbox(
                         label="Nombre de la Voz a Entrenar",
-                        placeholder="Ej: Jair_Oficial, Locutor_Premium"
+                        placeholder="Ej: Juan_Oficial, Locutor_Premium"
                     )
                     train_epochs = gr.Slider(
                         minimum=2,

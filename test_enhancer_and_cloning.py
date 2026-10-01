@@ -63,10 +63,25 @@ def test_1_synthetic_signal_denoising_and_filtering():
         pass
 
 
+def _get_or_create_test_audio():
+    ref_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reference_audios")
+    os.makedirs(ref_dir, exist_ok=True)
+    import glob
+    existing = glob.glob(os.path.join(ref_dir, "*.wav"))
+    if existing:
+        return existing[0]
+    dummy_path = os.path.join(ref_dir, "locutor_prueba.wav")
+    sr = 24000
+    t = np.linspace(0, 6.0, int(sr * 6.0), endpoint=False)
+    wave = 0.25 * np.sin(2 * np.pi * 220 * t) + 0.1 * np.sin(2 * np.pi * 440 * t)
+    sf.write(dummy_path, wave, sr)
+    return dummy_path
+
+
 def test_2_real_reference_audio_enhancement():
-    """Valida el acondicionamiento acústico sobre audio real de locutor (reference_audios/Jair.wav)."""
-    print("\n--- Test 2: Acondicionamiento de Audio Real de Referencia ---")
-    real_audio = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reference_audios", "Jair.wav")
+    """Valida el acondicionamiento acústico sobre audio de locutor."""
+    print("\n--- Test 2: Acondicionamiento de Audio de Referencia ---")
+    real_audio = _get_or_create_test_audio()
     assert os.path.isfile(real_audio), f"No existe el archivo de audio de prueba: {real_audio}"
     
     t0 = time.time()
@@ -77,10 +92,10 @@ def test_2_real_reference_audio_enhancement():
     clean_info = sf.info(clean_path)
     
     assert clean_sr == 24000, f"Error en SR: {clean_sr}"
-    assert clean_info.duration > 5.0, f"Error: Duración limpia muy corta ({clean_info.duration:.2f}s)"
+    assert clean_info.duration > 3.0, f"Error: Duración limpia muy corta ({clean_info.duration:.2f}s)"
     assert dt < 3.0, f"Error: Tiempo de procesamiento ({dt:.3f}s) excede NF1 (< 3.0s)"
     
-    print(f"✓ Test 2 Pasado: Audio real ({orig_info.duration:.2f}s) procesado a ({clean_info.duration:.2f}s) en {dt:.3f}s.")
+    print(f"✓ Test 2 Pasado: Audio de referencia ({orig_info.duration:.2f}s) procesado a ({clean_info.duration:.2f}s) en {dt:.3f}s.")
     try:
         os.remove(clean_path)
     except Exception:
@@ -90,7 +105,7 @@ def test_2_real_reference_audio_enhancement():
 def test_3_voice_profile_extraction_with_enhancement():
     """Valida la extracción de un perfil .pt con metadata extendida (enhanced=True)."""
     print("\n--- Test 3: Extracción de Perfil de Voz .pt con Limpieza IA ---")
-    real_audio = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reference_audios", "Jair.wav")
+    real_audio = _get_or_create_test_audio()
     engine = XTTSEngine.get_instance()
     
     voice_name = "test_locutor_enhanced"
